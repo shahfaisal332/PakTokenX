@@ -183,9 +183,84 @@ function createMessageType() {
   };
 }
 
+function createSetReleasedSupplyType() {
+  return {
+    encode(message) {
+      const parts = [];
+
+      if (message.creator) {
+        parts.push(encodeString(1, message.creator));
+      }
+
+      if (message.projectId !== undefined && message.projectId !== null) {
+        parts.push(encodeUint64(2, message.projectId));
+      }
+
+      // releasedSupply is a string (can be an amount or a percentage like "2%")
+      if (message.releasedSupply) {
+        parts.push(encodeString(3, String(message.releasedSupply)));
+      }
+
+      return {
+        finish() {
+          return Buffer.concat(parts);
+        },
+      };
+    },
+
+    decode(bytes) {
+      const result = {};
+      const offset = { value: 0 };
+
+      while (offset.value < bytes.length) {
+        const tag = Number(decodeVarint(bytes, offset));
+        const fieldNumber = tag >> 3;
+        const wireType = tag & 7;
+
+        if (wireType === 2) {
+          const length = Number(decodeVarint(bytes, offset));
+          const end = offset.value + length;
+          const value = Buffer.from(bytes.slice(offset.value, end)).toString("utf8");
+          offset.value = end;
+
+          if (fieldNumber === 1) {
+            result.creator = value;
+          } else if (fieldNumber === 3) {
+            result.releasedSupply = value;
+          }
+        } else if (wireType === 0) {
+          const value = decodeVarint(bytes, offset);
+          if (fieldNumber === 2) {
+            result.projectId = value.toString();
+          }
+        }
+      }
+
+      return result;
+    },
+
+    fromPartial(object) {
+      return {
+        creator: object.creator || "",
+        projectId:
+          object.projectId !== undefined ? String(object.projectId) : "0",
+        releasedSupply:
+          object.releasedSupply !== undefined
+            ? String(object.releasedSupply)
+            : "0",
+      };
+    },
+
+    create(object) {
+      return this.fromPartial(object || {});
+    },
+  };
+}
+
 const MsgCreateProject = createCreateProjectMessageType();
 const MsgBuyTokens = createMessageType();
 const MsgDistributeRevenue = createMessageType();
+const MsgSetReleasedSupply = createSetReleasedSupplyType();
 
 const registry = new Registry([
   ["/cosmos.bank.v1beta1.MsgSend", bankTx.MsgSend],
@@ -200,6 +275,10 @@ const registry = new Registry([
   [
     "/paktoken.tokenization.v1.MsgDistributeRevenue",
     MsgDistributeRevenue,
+  ],
+  [
+    "/paktoken.tokenization.v1.MsgSetReleasedSupply",
+    MsgSetReleasedSupply,
   ],
 ]);
 

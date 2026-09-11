@@ -18,7 +18,7 @@ func TestProjectMsgServerCreate(t *testing.T) {
 	require.NoError(t, err)
 
 	for i := 0; i < 5; i++ {
-		resp, err := srv.CreateProject(f.ctx, &types.MsgCreateProject{Creator: creator})
+		resp, err := srv.CreateProject(f.ctx, &types.MsgCreateProject{Creator: creator, TotalSupply: "1000", TokenPrice: 100})
 		require.NoError(t, err)
 		require.Equal(t, i, int(resp.Id))
 	}
@@ -34,7 +34,7 @@ func TestProjectMsgServerUpdate(t *testing.T) {
 	unauthorizedAddr, err := f.addressCodec.BytesToString([]byte("unauthorizedAddr___________"))
 	require.NoError(t, err)
 
-	_, err = srv.CreateProject(f.ctx, &types.MsgCreateProject{Creator: creator})
+	_, err = srv.CreateProject(f.ctx, &types.MsgCreateProject{Creator: creator, TotalSupply: "1000", TokenPrice: 100})
 	require.NoError(t, err)
 
 	tests := []struct {
@@ -49,17 +49,17 @@ func TestProjectMsgServerUpdate(t *testing.T) {
 		},
 		{
 			desc:    "unauthorized",
-			request: &types.MsgUpdateProject{Creator: unauthorizedAddr},
+			request: &types.MsgUpdateProject{Creator: unauthorizedAddr, TotalSupply: "1000", TokenPrice: 100},
 			err:     sdkerrors.ErrUnauthorized,
 		},
 		{
 			desc:    "key not found",
-			request: &types.MsgUpdateProject{Creator: creator, Id: 10},
+			request: &types.MsgUpdateProject{Creator: creator, Id: 10, TotalSupply: "1000", TokenPrice: 100},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
 			desc:    "completed",
-			request: &types.MsgUpdateProject{Creator: creator},
+			request: &types.MsgUpdateProject{Creator: creator, TotalSupply: "1000", TokenPrice: 100},
 		},
 	}
 	for _, tc := range tests {
@@ -84,7 +84,7 @@ func TestProjectMsgServerDelete(t *testing.T) {
 	unauthorizedAddr, err := f.addressCodec.BytesToString([]byte("unauthorizedAddr___________"))
 	require.NoError(t, err)
 
-	_, err = srv.CreateProject(f.ctx, &types.MsgCreateProject{Creator: creator})
+	_, err = srv.CreateProject(f.ctx, &types.MsgCreateProject{Creator: creator, TotalSupply: "1000", TokenPrice: 100})
 	require.NoError(t, err)
 
 	tests := []struct {

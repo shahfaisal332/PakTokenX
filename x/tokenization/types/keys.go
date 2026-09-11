@@ -13,6 +13,10 @@ const (
 	// It should be synced with the gov module's name if it is ever changed.
 	// See: https://github.com/cosmos/cosmos-sdk/blob/v0.52.0-beta.2/x/gov/types/keys.go#L9
 	GovModuleName = "gov"
+
+	// PaymentDenom is the denom investors use to pay for tokens and receive
+	// revenue distributions. It must match the chain's default_denom (stake).
+	PaymentDenom = "stake"
 )
 
 // ParamsKey is the prefix to retrieve all Params
