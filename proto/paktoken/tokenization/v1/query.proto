@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package paktoken.tokenization.v1;
+
+import "amino/amino.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "paktoken/tokenization/v1/holding.proto";
+import "paktoken/tokenization/v1/params.proto";
+import "paktoken/tokenization/v1/project.proto";
+
+option go_package = "paktoken/x/tokenization/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/paktoken/tokenization/v1/params";
+  }
+
+  // ListProject Queries a list of Project items.
+  rpc GetProject(QueryGetProjectRequest) returns (QueryGetProjectResponse) {
+    option (google.api.http).get = "/paktoken/tokenization/v1/project/{id}";
+  }
+
+  // ListProject defines the ListProject RPC.
+  rpc ListProject(QueryAllProjectRequest) returns (QueryAllProjectResponse) {
+    option (google.api.http).get = "/paktoken/tokenization/v1/project";
+  }
+
+  // ListHolding Queries a list of Holding items.
+  rpc GetHolding(QueryGetHoldingRequest) returns (QueryGetHoldingResponse) {
+    option (google.api.http).get = "/paktoken/tokenization/v1/holding/{index}";
+  }
+
+  // ListHolding defines the ListHolding RPC.
+  rpc ListHolding(QueryAllHoldingRequest) returns (QueryAllHoldingResponse) {
+    option (google.api.http).get = "/paktoken/tokenization/v1/holding";
+  }
+}
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryGetProjectRequest defines the QueryGetProjectRequest message.
+message QueryGetProjectRequest {
+  uint64 id = 1;
+}
+
+// QueryGetProjectResponse defines the QueryGetProjectResponse message.
+message QueryGetProjectResponse {
+  Project project = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryAllProjectRequest defines the QueryAllProjectRequest message.
+message QueryAllProjectRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryAllProjectResponse defines the QueryAllProjectResponse message.
+message QueryAllProjectResponse {
+  repeated Project project = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryGetHoldingRequest defines the QueryGetHoldingRequest message.
+message QueryGetHoldingRequest {
+  string index = 1;
+}
+
+// QueryGetHoldingResponse defines the QueryGetHoldingResponse message.
+message QueryGetHoldingResponse {
+  Holding holding = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryAllHoldingRequest defines the QueryAllHoldingRequest message.
+message QueryAllHoldingRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryAllHoldingResponse defines the QueryAllHoldingResponse message.
+message QueryAllHoldingResponse {
+  repeated Holding holding = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

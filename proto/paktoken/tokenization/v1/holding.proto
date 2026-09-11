@@ -1,0 +1,13 @@
+syntax = "proto3";
+package paktoken.tokenization.v1;
+
+option go_package = "paktoken/x/tokenization/types";
+
+// Holding defines the Holding message.
+message Holding {
+  string index = 1;
+  uint64 amount = 2;
+  uint64 project_id = 3;
+  string investor = 4;
+  string creator = 5;
+}

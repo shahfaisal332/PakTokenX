@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package paktoken.tokenization.v1;
+
+import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "paktoken/tokenization/v1/params.proto";
+
+option go_package = "paktoken/x/tokenization/types";
+
+// Msg defines the Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+  rpc CreateProject(MsgCreateProject) returns (MsgCreateProjectResponse);
+  rpc UpdateProject(MsgUpdateProject) returns (MsgUpdateProjectResponse);
+  rpc DeleteProject(MsgDeleteProject) returns (MsgDeleteProjectResponse);
+  rpc BuyTokens(MsgBuyTokens) returns (MsgBuyTokensResponse);
+  rpc DistributeRevenue(MsgDistributeRevenue) returns (MsgDistributeRevenueResponse);
+  rpc CreateHolding(MsgCreateHolding) returns (MsgCreateHoldingResponse);
+  rpc UpdateHolding(MsgUpdateHolding) returns (MsgUpdateHoldingResponse);
+  rpc DeleteHolding(MsgDeleteHolding) returns (MsgDeleteHoldingResponse);
+
+  // SetReleasedSupply defines the SetReleasedSupply RPC.
+  rpc SetReleasedSupply(MsgSetReleasedSupply) returns (MsgSetReleasedSupplyResponse);
+}
+
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "paktoken/x/tokenization/MsgUpdateParams";
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  Params params = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message MsgUpdateParamsResponse {}
+
+message MsgCreateProject {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string name = 2;
+  string total_supply = 3;
+  string owner = 4;
+  uint64 token_price = 5;
+  string category = 6;
+}
+
+message MsgCreateProjectResponse {
+  uint64 id = 1;
+}
+
+message MsgUpdateProject {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 id = 2;
+  string name = 3;
+  string total_supply = 4;
+  string owner = 5;
+  uint64 token_price = 6;
+  string category = 7;
+}
+
+message MsgUpdateProjectResponse {}
+
+message MsgDeleteProject {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 id = 2;
+}
+
+message MsgDeleteProjectResponse {}
+
+message MsgBuyTokens {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 project_id = 2;
+  uint64 amount = 3;
+}
+
+message MsgBuyTokensResponse {}
+
+message MsgDistributeRevenue {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 project_id = 2;
+  uint64 amount = 3;
+}
+
+message MsgDistributeRevenueResponse {}
+
+message MsgCreateHolding {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string index = 2;
+  uint64 amount = 3;
+  uint64 project_id = 4;
+  string investor = 5;
+}
+
+message MsgCreateHoldingResponse {}
+
+message MsgUpdateHolding {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string index = 2;
+  uint64 amount = 3;
+  uint64 project_id = 4;
+  string investor = 5;
+}
+
+message MsgUpdateHoldingResponse {}
+
+message MsgDeleteHolding {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string index = 2;
+}
+
+message MsgDeleteHoldingResponse {}
+
+// MsgSetReleasedSupply defines the MsgSetReleasedSupply message.
+message MsgSetReleasedSupply {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 project_id = 2;
+  string released_supply = 3;
+}
+
+// MsgSetReleasedSupplyResponse defines the MsgSetReleasedSupplyResponse message.
+message MsgSetReleasedSupplyResponse {}

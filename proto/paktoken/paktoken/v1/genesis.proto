@@ -1,0 +1,17 @@
+syntax = "proto3";
+package paktoken.paktoken.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "paktoken/paktoken/v1/params.proto";
+
+option go_package = "paktoken/x/paktoken/types";
+
+// GenesisState defines the paktoken module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package paktoken.tokenization.v1;
+
+option go_package = "paktoken/x/tokenization/types";
+
+// Project defines the Project message.
+message Project {
+  uint64 id = 1;
+  string name = 2;
+  string total_supply = 3;
+  string owner = 4;
+  uint64 token_price = 5;
+  string creator = 6;
+  string category = 7;
+  string released_supply = 8;
+}

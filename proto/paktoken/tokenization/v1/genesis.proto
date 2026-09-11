@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package paktoken.tokenization.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "paktoken/tokenization/v1/holding.proto";
+import "paktoken/tokenization/v1/params.proto";
+import "paktoken/tokenization/v1/project.proto";
+
+option go_package = "paktoken/x/tokenization/types";
+
+// GenesisState defines the tokenization module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  repeated Project project_list = 2 [(gogoproto.nullable) = false];
+  uint64 project_count = 3;
+  repeated Holding holding_map = 4 [(gogoproto.nullable) = false];
+}
