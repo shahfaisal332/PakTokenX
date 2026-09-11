@@ -7,3 +7,6 @@ release/
 *.dot
 *.log
 *.ign
+backend/node_modules/
+backend/.env
+*.swp
